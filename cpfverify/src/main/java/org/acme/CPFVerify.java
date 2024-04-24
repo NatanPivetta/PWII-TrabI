@@ -7,6 +7,9 @@ import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 
 
 @Path("/hello")
@@ -17,6 +20,8 @@ public class CPFVerify {
     private int[] EntryVector = new int[11];
     private int VerificatorDigitOne;
     private int VerificatorDigitTwo;
+    private String regexStr = "[0-9]+";
+
 
 
 
@@ -27,7 +32,11 @@ public class CPFVerify {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello(@FormParam("cpf") String cpf) {
 
-        
+    
+        if(!cpf.matches("[0-9]+")) return "Apenas numeros!";
+        if(cpf.length() < 11)return "CPF Muito Pequeno!";
+        if(cpf.length() > 11)return "CPF Muito Grande!";
+        if(verificaEqual()) return "CPF Inválido!";        
 
             
             for (int i=0; i<VerifyEntryVector.length;i++){
@@ -38,8 +47,8 @@ public class CPFVerify {
             EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
         }
 
-        if(verificaEqual()) return "CPF Inválido!";
-        if(cpf.length() > 11)return "CPF Muito Grande!";
+        
+        
 
         this.VerificatorDigitOne = verificadorOne();
         this.VerificatorDigitTwo = verificadorTwo();
