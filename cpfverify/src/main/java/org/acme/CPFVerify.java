@@ -26,43 +26,56 @@ public class CPFVerify {
     @Produces(MediaType.APPLICATION_JSON)
     public Message hello(@FormParam("cpf") String cpf) {
 
-        if (!cpf.matches("[0-9]+")) {
-            this.mensagem.setMsg("Apenas numeros!");
-            this.mensagem.setStatus(false);
-        }
-        if (cpf.length() < 11) {
-            this.mensagem.setMsg("CPF Muito Pequeno!");
-            this.mensagem.setStatus(false);
-        }
-        if (cpf.length() > 11) {
-
-            this.mensagem.setMsg("CPF Muito Grande!");
-            this.mensagem.setStatus(false);
-        }
-
-        if (verificaEqual()) {
-            this.mensagem.setMsg("CPF Inválido!");
-            this.mensagem.setStatus(false);
-        }
 
         for (int i = 0; i < VerifyEntryVector.length; i++) {
             VerifyEntryVector[i] = i;
         }
 
-        for (int i = 0; i < EntryVector.length; i++) {
-            EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
+        if (!verificaEstrutura(cpf)) {
+            System.out.println("Invalido");
+        } else {
+
+            for (int i = 0; i < EntryVector.length; i++) {
+                EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
+            }
+            
+            this.VerificatorDigitOne = verificadorOne();
+            this.VerificatorDigitTwo = verificadorTwo();
+
+            if (EntryVector[9] == this.VerificatorDigitOne && this.EntryVector[10] == this.VerificatorDigitTwo) {
+                this.mensagem.setMsg("CPF Válido");
+                this.mensagem.setStatus(true);
+            }
         }
 
-        this.VerificatorDigitOne = verificadorOne();
-        this.VerificatorDigitTwo = verificadorTwo();
-
-        if (EntryVector[9] == this.VerificatorDigitOne && this.EntryVector[10] == this.VerificatorDigitTwo) {
-            this.mensagem.setMsg("CPF Válido");
-            this.mensagem.setStatus(true);
-        }
-
-        System.out.println(this.VerificatorDigitOne + "" + this.VerificatorDigitTwo);
+        // System.out.println(this.VerificatorDigitOne + "" + this.VerificatorDigitTwo);
         return this.mensagem;
+    }
+
+    public boolean verificaEstrutura(String cpf) {
+
+        if (!cpf.matches("[0-9]+")) {
+            this.mensagem.setMsg("Apenas numeros!");
+            this.mensagem.setStatus(false);
+            return false;
+        } else if (cpf.length() < 11) {
+            this.mensagem.setMsg("CPF Muito Pequeno!");
+            this.mensagem.setStatus(false);
+            return false;
+        } else if (cpf.length() > 11) {
+
+            this.mensagem.setMsg("CPF Muito Grande!");
+            this.mensagem.setStatus(false);
+            return false;
+        }
+
+        else if (verificaEqual()) {
+            this.mensagem.setMsg("CPF Inválido!");
+            this.mensagem.setStatus(false);
+            return false;
+        }
+
+        return true;
     }
 
     public boolean verificaEqual() {
