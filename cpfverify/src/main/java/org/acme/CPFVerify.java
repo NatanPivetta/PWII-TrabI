@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-@Path("/hello")
+@Path("/cpfverify")
 public class CPFVerify {
 
     // vetor com os pesos para realizar calculo do digito verificador
@@ -26,7 +26,6 @@ public class CPFVerify {
     @Produces(MediaType.APPLICATION_JSON)
     public Message hello(@FormParam("cpf") String cpf) {
 
-
         for (int i = 0; i < VerifyEntryVector.length; i++) {
             VerifyEntryVector[i] = i;
         }
@@ -36,15 +35,22 @@ public class CPFVerify {
         } else {
 
             for (int i = 0; i < EntryVector.length; i++) {
-                EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
+                this.EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
             }
-            
-            this.VerificatorDigitOne = verificadorOne();
-            this.VerificatorDigitTwo = verificadorTwo();
 
-            if (EntryVector[9] == this.VerificatorDigitOne && this.EntryVector[10] == this.VerificatorDigitTwo) {
-                this.mensagem.setMsg("CPF Válido");
-                this.mensagem.setStatus(true);
+            if (!verificaEqual()) {
+
+                this.VerificatorDigitOne = verificadorOne();
+                this.VerificatorDigitTwo = verificadorTwo();
+                System.out.println(this.verificadorOne() + "" + this.verificadorTwo());
+                if (this.EntryVector[9] == this.VerificatorDigitOne
+                        && this.EntryVector[10] == this.VerificatorDigitTwo) {
+                    this.mensagem.setMsg("CPF Válido");
+                    this.mensagem.setStatus(true);
+                }
+            } else {
+                this.mensagem.setMsg("Digitos Identicos");
+                this.mensagem.setStatus(false);
             }
         }
 
@@ -69,19 +75,13 @@ public class CPFVerify {
             return false;
         }
 
-        else if (verificaEqual()) {
-            this.mensagem.setMsg("CPF Inválido!");
-            this.mensagem.setStatus(false);
-            return false;
-        }
-
         return true;
     }
 
     public boolean verificaEqual() {
-        int primeiroDigito = EntryVector[0];
+        int primeiroDigito = this.EntryVector[0];
         for (int i = 0; i < EntryVector.length; i++) {
-            if (EntryVector[i] != primeiroDigito) {
+            if (this.EntryVector[i] != primeiroDigito) {
                 return false;
             }
         }
@@ -94,7 +94,7 @@ public class CPFVerify {
         int sum = 0;
         int j = 1;
         for (int i = 0; i < 9; i++) {
-            sum += (VerifyEntryVector[j] * EntryVector[i]);
+            sum += (VerifyEntryVector[j] * this.EntryVector[i]);
             j++;
         }
         if (sum % 11 == 10) {
@@ -108,7 +108,7 @@ public class CPFVerify {
         int sum = 0;
         int j = 0;
         for (int i = 0; i < 10; i++) {
-            sum += (VerifyEntryVector[j] * EntryVector[i]);
+            sum += (VerifyEntryVector[j] * this.EntryVector[i]);
             j++;
         }
         if (sum % 11 == 10) {
