@@ -1,6 +1,6 @@
 package org.acme;
 
-import main.java.org.acme.Message;
+import org.acme.Message;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -9,6 +9,8 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+
+
 
 @Path("/cpfverify")
 public class CPFVerify {

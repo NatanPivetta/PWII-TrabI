@@ -1,4 +1,4 @@
-package main.java.org.acme;
+package org.acme;
 
 public class Message {
     

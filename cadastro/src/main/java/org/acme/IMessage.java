@@ -1,4 +1,4 @@
-package main.java.org.acme;
+package org.acme;
 
 import java.beans.ConstructorProperties;
 

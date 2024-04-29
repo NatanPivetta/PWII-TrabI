@@ -7,8 +7,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.FormParam;
-import main.java.org.acme.IMessage;
-import main.java.org.acme.Message;
+import org.acme.IMessage;
+import org.acme.Message;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 
