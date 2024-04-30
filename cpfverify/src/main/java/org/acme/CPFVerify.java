@@ -44,11 +44,14 @@ public class CPFVerify {
 
                 this.VerificatorDigitOne = verificadorOne();
                 this.VerificatorDigitTwo = verificadorTwo();
-                System.out.println(this.verificadorOne() + "" + this.verificadorTwo());
+                
                 if (this.EntryVector[9] == this.VerificatorDigitOne
                         && this.EntryVector[10] == this.VerificatorDigitTwo) {
                     this.mensagem.setMsg("CPF Válido");
                     this.mensagem.setStatus(true);
+                }else{
+                    this.mensagem.setMsg("CPF Inválido!");
+                    this.mensagem.setStatus(false);
                 }
             } else {
                 this.mensagem.setMsg("Digitos Identicos");

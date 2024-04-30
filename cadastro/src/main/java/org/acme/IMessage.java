@@ -13,7 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 
-@RegisterRestClient(baseUri = "https://localhost:8080/")
+@RegisterRestClient(baseUri = "http://localhost:8080")
 public interface IMessage {
     
 
@@ -23,6 +23,6 @@ public interface IMessage {
     @Path("/cpfverify")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    IMessage confirm(
+    Message confirm(
         @FormParam("cpf") String cpf);
 }
