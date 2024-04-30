@@ -15,7 +15,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 
 
-@Path("/hello")
+@Path("/cadastro")
 public class Cadastro {
 
     @Inject
@@ -25,7 +25,7 @@ public class Cadastro {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Message hello(@FormParam("cpf") String cpf) {
+    public Message cpfVerify(@FormParam("cpf") String cpf) {
         return service.confirm(cpf);
     }
 }
