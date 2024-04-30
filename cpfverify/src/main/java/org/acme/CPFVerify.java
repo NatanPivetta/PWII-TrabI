@@ -26,7 +26,7 @@ public class CPFVerify {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Message hello(@FormParam("cpf") String cpf) {
+    public Message entrycpf(@FormParam("cpf") String cpf) {
 
         for (int i = 0; i < VerifyEntryVector.length; i++) {
             VerifyEntryVector[i] = i;
@@ -44,7 +44,7 @@ public class CPFVerify {
 
                 this.VerificatorDigitOne = verificadorOne();
                 this.VerificatorDigitTwo = verificadorTwo();
-                
+
                 if (this.EntryVector[9] == this.VerificatorDigitOne
                         && this.EntryVector[10] == this.VerificatorDigitTwo) {
                     this.mensagem.setMsg("CPF Válido");
