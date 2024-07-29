@@ -8,12 +8,14 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.GET;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 
 @Path("/cadastro")
@@ -56,4 +58,22 @@ public class Cadastro {
 
         return mensagem;
     }
+
+
+
+
+    @GET
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public String list() {
+        // 3 - O método `listAll` recupera todos os objetos da classe User.
+        String str = "";
+        List<User> lista = User.listAll();
+        for (User user : lista) {
+            str += "User: " + user.getCpf() + " PassW:" + user.getPassword() + "\n";
+        }
+        return str;
+    }
+    
 }

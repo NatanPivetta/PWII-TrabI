@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class User extends PanacheEntity implements Serializable {
@@ -28,5 +29,10 @@ public class User extends PanacheEntity implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<User> list() {
+        // 3 - O método `listAll` recupera todos os objetos da classe User.
+        return User.listAll();
     }
 }
