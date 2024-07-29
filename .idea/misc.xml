@@ -7,11 +7,12 @@
         <option value="$PROJECT_DIR$/cadastro/pom.xml" />
         <option value="$PROJECT_DIR$/cpfverify/pom.xml" />
         <option value="$PROJECT_DIR$/login/pom.xml" />
+        <option value="$PROJECT_DIR$/DB/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/login/pom.xml" />
+        <option value="$PROJECT_DIR$/DB/pom.xml" />
       </set>
     </option>
   </component>

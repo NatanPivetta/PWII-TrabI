@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 public class CPFVerify {
 
     // vetor com os pesos para realizar calculo do digito verificador
-    private int[] WeightDigits = new int[10];
+    private final int[] WeightDigits = new int[10];
     private int[] EntryVector = new int[11];
     private int VerificatorDigitOne;
     private int VerificatorDigitTwo;
@@ -73,9 +73,9 @@ public class CPFVerify {
 
 
     public boolean verifyEqualDigits() {
-        int primeiroDigito = EntryVector[0];
+        int firstDigit = EntryVector[0];
         for (int i = 0; i < EntryVector.length; i++) {
-            if (EntryVector[i] != primeiroDigito) {
+            if (EntryVector[i] != firstDigit) {
                 return false;
             }
         }
