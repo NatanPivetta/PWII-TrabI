@@ -1,92 +1,81 @@
 package org.acme;
 
-import org.acme.Message;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 
 
 @Path("/cpfverify")
 public class CPFVerify {
 
     // vetor com os pesos para realizar calculo do digito verificador
-    private int[] VerifyEntryVector = new int[10];
+    private int[] WeightDigits = new int[10];
     private int[] EntryVector = new int[11];
     private int VerificatorDigitOne;
     private int VerificatorDigitTwo;
     private String regexStr = "[0-9]+";
-    private Message mensagem = new Message(false, "");
+    private Message mensagem;
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Message entrycpf(@FormParam("cpf") String cpf) {
-
-        for (int i = 0; i < VerifyEntryVector.length; i++) {
-            VerifyEntryVector[i] = i;
+        for (int i = 0; i < WeightDigits.length; i++) {
+            WeightDigits[i] = i;
         }
-
-        if (!verificaEstrutura(cpf)) {
+        if (!VerifyRegexStruct(cpf)) {
             System.out.println("Invalido");
         } else {
-
-            for (int i = 0; i < EntryVector.length; i++) {
-                this.EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
-            }
-
-            if (!verificaEqual()) {
-
-                this.VerificatorDigitOne = verificadorOne();
-                this.VerificatorDigitTwo = verificadorTwo();
-
-                if (this.EntryVector[9] == this.VerificatorDigitOne
-                        && this.EntryVector[10] == this.VerificatorDigitTwo) {
-                    this.mensagem.setMsg("CPF Válido");
-                    this.mensagem.setStatus(true);
+                verifyFirstDigit();
+                verifySecondDigit();
+                if (EntryVector[9] == VerificatorDigitOne
+                        && EntryVector[10] == VerificatorDigitTwo) {
+                    mensagem = new Message(true, "CPF Válido!");
                 }else{
-                    this.mensagem.setMsg("CPF Inválido!");
-                    this.mensagem.setStatus(false);
+                    mensagem = new Message(false, "CPF Inválido!");
                 }
-            } else {
-                this.mensagem.setMsg("Digitos Identicos");
-                this.mensagem.setStatus(false);
             }
-        }
-
-        // System.out.println(this.VerificatorDigitOne + "" + this.VerificatorDigitTwo);
         return this.mensagem;
     }
 
-    public boolean verificaEstrutura(String cpf) {
 
-        if (!cpf.matches("[0-9]+")) {
-            this.mensagem.setMsg("Apenas numeros!");
-            this.mensagem.setStatus(false);
-            return false;
-        } else if (cpf.length() < 11) {
-            this.mensagem.setMsg("CPF Muito Pequeno!");
-            this.mensagem.setStatus(false);
-            return false;
-        } else if (cpf.length() > 11) {
 
-            this.mensagem.setMsg("CPF Muito Grande!");
-            this.mensagem.setStatus(false);
+
+
+
+
+    public boolean VerifyRegexStruct(String cpf) {
+
+        if (!cpf.matches("[0-9]{11}")) {
+            mensagem = new Message(false, "CPF Inválido!");
             return false;
+        } else{
+            LoadDigitsVector(cpf);
+            if(verifyEqualDigits()){
+                mensagem = new Message(false, "CPF Inválido!");
+                return false;
+            }
+            mensagem = new Message(false, "CPF Válido!");
+            return true;
         }
 
-        return true;
+
     }
 
-    public boolean verificaEqual() {
-        int primeiroDigito = this.EntryVector[0];
+    public void LoadDigitsVector(String cpf){
         for (int i = 0; i < EntryVector.length; i++) {
-            if (this.EntryVector[i] != primeiroDigito) {
+            EntryVector[i] = Character.getNumericValue(cpf.charAt(i));
+        }
+    }
+
+
+    public boolean verifyEqualDigits() {
+        int primeiroDigito = EntryVector[0];
+        for (int i = 0; i < EntryVector.length; i++) {
+            if (EntryVector[i] != primeiroDigito) {
                 return false;
             }
         }
@@ -95,31 +84,32 @@ public class CPFVerify {
 
     }
 
-    public int verificadorOne() {
+    public void verifyFirstDigit() {
         int sum = 0;
         int j = 1;
         for (int i = 0; i < 9; i++) {
-            sum += (VerifyEntryVector[j] * this.EntryVector[i]);
+            sum += (WeightDigits[j] * EntryVector[i]);
             j++;
         }
         if (sum % 11 == 10) {
-            return 0;
+            VerificatorDigitOne = 0;
         } else {
-            return sum % 11;
+            VerificatorDigitOne = sum % 11;
         }
+
     }
 
-    public int verificadorTwo() {
+    public void verifySecondDigit() {
         int sum = 0;
         int j = 0;
         for (int i = 0; i < 10; i++) {
-            sum += (VerifyEntryVector[j] * this.EntryVector[i]);
+            sum += (WeightDigits[j] * EntryVector[i]);
             j++;
         }
         if (sum % 11 == 10) {
-            return 0;
+            VerificatorDigitTwo =  0;
         } else {
-            return sum % 11;
+            VerificatorDigitTwo = sum % 11;
         }
     }
 
