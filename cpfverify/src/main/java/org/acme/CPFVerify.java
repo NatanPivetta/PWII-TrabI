@@ -16,7 +16,6 @@ public class CPFVerify {
     private int[] EntryVector = new int[11];
     private int VerificatorDigitOne;
     private int VerificatorDigitTwo;
-    private String regexStr = "[0-9]+";
     private Message mensagem;
 
     @GET
