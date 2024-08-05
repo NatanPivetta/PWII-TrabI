@@ -1,9 +1,9 @@
 package org.acme;
 
-import jakarta.ws.rs.POST;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 
@@ -19,10 +19,10 @@ public class CPFVerify {
     private String regexStr = "[0-9]+";
     private Message mensagem;
 
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Message entrycpf(@FormParam("cpf") String cpf) {
+    public Message entrycpf(@QueryParam("cpf") String cpf) {
         for (int i = 0; i < WeightDigits.length; i++) {
             WeightDigits[i] = i;
         }
